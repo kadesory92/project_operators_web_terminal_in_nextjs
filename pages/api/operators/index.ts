@@ -7,17 +7,19 @@ export default function handler(
   ) {
 
     const httpMethod=req.method;
-    const {id, name}=req.body;
 
     switch(httpMethod){
       case "GET":
         return res.status(200).json(db.operator);
         break;
       case "POST":
-        res.status(200).json({
-          id:id+1,
-          name:name
-        });
+        const operator:string = req.body.nameOperator
+        const newOperator = {
+          id: Date.now(),
+          name: operator
+        }
+        db.operator.push(newOperator)
+        res.status(201).json(newOperator)
         break;
       default:
         res.setHeader('Allow', ['GET','POST']);

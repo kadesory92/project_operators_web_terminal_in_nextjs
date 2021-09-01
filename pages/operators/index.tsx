@@ -4,11 +4,22 @@ import {Container} from '../../styles/componentsStyle/styleOperatorIndex'
 
 const Operators = ({listOperators}:any) => {
 
-  const [dataOperator, setDataOperator]=useState(listOperators)
+  const [dataOperator, setDataOperator]=useState(listOperators);
+  const [nameOperator, setNameOperator]=useState<string>('');
 
-  const addNewOperator=async ({operator}:any) => {
-   
+  const handlerSubmit= async () => {
+    const response = await fetch('/api/operator', {
+      method: 'POST',
+      body: JSON.stringify({ nameOperator }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    const data = await response.json()
+    console.log(data);
+    setDataOperator(data)
   }
+
 
     return (
         <Container>
@@ -25,9 +36,9 @@ const Operators = ({listOperators}:any) => {
                 </ul>
             </div>
             <div>
-              <form> 
+              <form onSubmit={handlerSubmit}> 
                   <label>Ajout d'un nouveau operator:</label><br></br>
-                  <input type="text" />
+                  <input value={nameOperator}  type="text" onChange={e=>setNameOperator(e.target.value)}/>
                   <input type="submit" value="Add New Operator"/>
               </form>
             </div>
